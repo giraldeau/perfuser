@@ -1,0 +1,13 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: Perfuser library
+Description: The Perfuser library handle communication with perfuser-module to register and unregister signal handler on perf events.
+Version: @PACKAGE_VERSION@
+Requires:
+Requires.private:
+Libs: -L${libdir} -lperfuser -ldl
+Cflags: -I${includedir} 
+

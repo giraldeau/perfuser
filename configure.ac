@@ -27,6 +27,7 @@ AC_CONFIG_FILES([
     Makefile
     lib/Makefile
     tests/Makefile
+    perfuser.pc
 ])
 
 AC_OUTPUT
