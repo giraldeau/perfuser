@@ -10,7 +10,6 @@
 #include <signal.h>
 #include <pthread.h>
 #include <errno.h>
-#include <sys/ioctl.h>
 
 #include "memory.h"
 #include "libperfuser.h"
@@ -108,3 +107,7 @@ int perfuser_unregister()
 	return ret;
 }
 
+int perfuser_get_fd()
+{
+	return perfuser_registered() ? state->fd->_fileno : -1;
+}

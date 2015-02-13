@@ -9,6 +9,8 @@
 #define LIBPERFUSER_H_
 
 #include <signal.h>
+#include <sys/ioctl.h>
+#include <perfuser-abi.h>
 
 /*
  * Perfuser configuration
@@ -51,5 +53,10 @@ int perfuser_register(struct perfuser *pu);
  * Return: 0 in case of success, error code otherwise
  */
 int perfuser_unregister();
+
+/*
+ * Return the file descriptor for direct ioctl().
+ */
+int perfuser_get_fd();
 
 #endif /* LIBPERFUSER_H_ */

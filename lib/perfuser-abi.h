@@ -16,6 +16,8 @@ enum perfuser_cmd {
 	PERFUSER_UNREGISTER = 1,
 	PERFUSER_STATUS = 2,
 	PERFUSER_DEBUG = 3,
+	PERFUSER_SENDSIG = 4, /* benchmark purpose */
+	PERFUSER_NONE = 5,
 };
 
 /*
