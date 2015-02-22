@@ -42,7 +42,7 @@ static int perfuser_ioctl(struct perfuser_state *state, int cmd)
 	if (!(state && state->fd))
 		return -1;
 	info.cmd = cmd;
-	info.sig = state->pu.signum;
+	info.signum = state->pu.signum;
 	return ioctl(state->fd->_fileno, PERFUSER_IOCTL, &info);
 }
 
