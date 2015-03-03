@@ -55,7 +55,7 @@ void *do_work(void *args) {
 int main(int argc, char **argv)
 {
 	int i, ret;
-	int nb = 1000;
+	int nb = 10000;
 	pthread_t pth[th];
 
 	printf("test_ioctl begin\n");
