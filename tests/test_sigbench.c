@@ -94,16 +94,9 @@ int profile_wrapper_calibrate(void *arg)
 	return 0;
 }
 
-int profile_wrapper_ioctl(void *arg)
-{
-	struct perfuser_info info = { .cmd = PERFUSER_NONE };
-	int fd = perfuser_get_fd();
-	return ioctl(fd, PERFUSER_IOCTL, &info);
-}
-
 int profile_wrapper_sendsig(void *arg)
 {
-	struct perfuser_info info = { .cmd = PERFUSER_SENDSIG, .sig = SIGUSR1 };
+	struct perfuser_info info = { .cmd = PERFUSER_SENDSIG, .signum = SIGUSR1 };
 	int fd = perfuser_get_fd();
 	//printf("sendsig\n");
 	return ioctl(fd, PERFUSER_IOCTL, &info);
@@ -117,15 +110,14 @@ int profile_wrapper_kill(void *arg)
 
 static struct profile prof[] = {
   { .name = "calibrate", .func = profile_wrapper_calibrate, },
-  { .name = "ioctl", .func = profile_wrapper_ioctl, },
   { .name = "sendsig", .func = profile_wrapper_sendsig, },
   { .name = "kill", .func = profile_wrapper_kill, },
 };
 
 static int nrprof = sizeof(prof) / sizeof(prof[0]);
 
-//#define REPEAT 1000000;
-#define REPEAT 1000000;
+//#define REPEAT 1000000
+#define REPEAT 1000000
 
 int main(int argc, char **argv)
 {

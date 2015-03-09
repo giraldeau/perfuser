@@ -17,7 +17,6 @@ enum perfuser_cmd {
 	PERFUSER_STATUS = 2,
 	PERFUSER_DEBUG = 3,
 	PERFUSER_SENDSIG = 4, /* benchmark purpose */
-	PERFUSER_NONE = 5,
 };
 
 /*
@@ -25,7 +24,7 @@ enum perfuser_cmd {
  */
 struct perfuser_info {
 	int cmd;
-	int sig;
+	int signum;
 } __attribute__((packed));
 
 /* Borrow some unused range of LTTng ioctl ;-) */
