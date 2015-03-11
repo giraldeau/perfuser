@@ -8,6 +8,8 @@
 #ifndef PERFUSER_ABI_H_
 #define PERFUSER_ABI_H_
 
+#include <linux/types.h>
+
 #define PERFUSER_PROC "perfuser"
 #define PERFUSER_PATH "/proc/" PERFUSER_PROC
 
@@ -29,17 +31,18 @@ struct perfuser_info {
 } __attribute__((packed));
 
 /*
- * Extends siginfo_t to pass sample context.
+ * Extends siginfo_t to forward context.
  */
-typedef struct perfuser_siginfo {
+struct perfuser_siginfo {
 	union {
 		siginfo_t _info;
 		struct {
 			int _pad[4]; // preserve first fields of siginfo_t
-			int bidon;
+			__u32 type;
+			__u64 config;
 		} _perf;
 	};
-} perfuser_siginfo_t;
+} __attribute__((packed));
 
 /* Borrow some unused range of LTTng ioctl ;-) */
 #define PERFUSER_IOCTL 		_IO(0xF6, 0x90)

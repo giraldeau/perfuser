@@ -12,11 +12,12 @@
 
 static void handler(int nr, siginfo_t *info, void *void_context)
 {
-	perfuser_siginfo_t *psi = (void *) info;
+	struct perfuser_siginfo *psi = (void *) info;
 	printf("psi->_info.si_signo=%d\n", psi->_info.si_signo);
 	printf("psi->_info.si_errno=%d\n", psi->_info.si_errno);
 	printf("psi->_info.si_code=%d\n", psi->_info.si_code);
-	printf("psi->_perf.bidon=%d\n", psi->_perf.bidon);
+	printf("psi->_perf.type=%d\n", psi->_perf.type);
+	printf("psi->_perf.config=%lld\n", psi->_perf.config);
 }
 
 static int install_handler(void)
