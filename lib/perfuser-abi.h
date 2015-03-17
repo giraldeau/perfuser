@@ -31,17 +31,15 @@ struct perfuser_info {
 } __attribute__((packed));
 
 /*
- * Extends siginfo_t to forward context.
+ * Forward statistics to user-space.
  */
-struct perfuser_siginfo {
-	union {
-		siginfo_t _info;
-		struct {
-			int _pad[4]; // preserve first fields of siginfo_t
-			__u32 type;
-			__u64 config;
-		} _perf;
-	};
+struct perfuser_stats {
+	int nmi;
+	int irq;
+	int sig;
+	int blk;
+	int err;
+	unsigned long ts;
 } __attribute__((packed));
 
 /* Borrow some unused range of LTTng ioctl ;-) */

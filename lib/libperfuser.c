@@ -98,6 +98,7 @@ error_fd:
 int perfuser_unregister()
 {
 	int ret = 0;
+	ret = perfuser_ioctl(state, PERFUSER_DEBUG);
 	if (perfuser_registered()) {
 		ret = perfuser_ioctl(state, PERFUSER_UNREGISTER);
 		sigaction(state->pu.signum, &state->sigact_old, NULL);

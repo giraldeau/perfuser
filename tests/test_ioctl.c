@@ -14,6 +14,8 @@
 #include <pthread.h>
 
 #include <libperfuser.h>
+#include <sys/syscall.h>
+#include <unistd.h>
 
 #define PAGE_SIZE 4096
 static int th = 4;
@@ -41,7 +43,7 @@ void *do_work(void *args) {
 	id = rank++;
 	pthread_mutex_unlock(&mutex);
 
-	printf("%20s %ld\n", "self", pthread_self());
+	printf("%20s %ld pid=%d tid=%d\n", "self", pthread_self(), getpid(), (int) syscall(SYS_gettid));
 	for (i = 0; i < nb; i++) {
 		char *buf = mmap(NULL, PAGE_SIZE, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
 		memset(buf, 0x42, PAGE_SIZE);
@@ -55,7 +57,7 @@ void *do_work(void *args) {
 int main(int argc, char **argv)
 {
 	int i, ret;
-	int nb = 10000;
+	int nb = 1000;
 	pthread_t pth[th];
 
 	printf("test_ioctl begin\n");

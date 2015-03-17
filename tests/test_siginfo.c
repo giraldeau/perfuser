@@ -8,16 +8,28 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
 #include <libperfuser.h>
+
+FILE *f = NULL;
+int once = 1;
 
 static void handler(int nr, siginfo_t *info, void *void_context)
 {
-	struct perfuser_siginfo *psi = (void *) info;
-	printf("psi->_info.si_signo=%d\n", psi->_info.si_signo);
-	printf("psi->_info.si_errno=%d\n", psi->_info.si_errno);
-	printf("psi->_info.si_code=%d\n", psi->_info.si_code);
-	printf("psi->_perf.type=%d\n", psi->_perf.type);
-	printf("psi->_perf.config=%lld\n", psi->_perf.config);
+	struct perfuser_stats pstats;
+	int ret = read(f->_fileno, &pstats, sizeof(pstats));
+	if (ret < 0) {
+		printf("read failed %s\n", strerror(ret));
+		return;
+	}
+	if (once) {
+		printf("%5s %5s %5s %5s %5s %5s %5s %10s\n", "pid", "ret", "nmi", "irq",
+			"sig", "blk", "err", "ts");
+		once = 0;
+	}
+	printf("%5d %5d %5d %5d %5d %5d %5d %10lu\n", getpid(), ret, pstats.nmi,
+			pstats.irq, pstats.sig, pstats.blk, pstats.err,
+			pstats.ts);
 }
 
 static int install_handler(void)
@@ -43,17 +55,28 @@ static int install_handler(void)
 
 int main(int argc, char **argv)
 {
-
-	install_handler();
-	FILE *f = fopen(PERFUSER_PATH, "rw");
-	if (f == NULL)
-		return -1;
+	sigset_t mask;
 	struct perfuser_info info = {
-		.cmd = PERFUSER_SENDSIG,
 		.signum = SIGUSR1,
 	};
-	printf("ioctl\n");
+	install_handler();
+	f = fopen(PERFUSER_PATH, "rw");
+	if (f == NULL) {
+		printf("fopen failed %s\n", strerror(errno));
+		return -1;
+	}
+
+	info.cmd = PERFUSER_REGISTER;
 	ioctl(f->_fileno, PERFUSER_IOCTL, &info);
+
+	printf("ioctl\n");
+	info.cmd = PERFUSER_SENDSIG;
+	ioctl(f->_fileno, PERFUSER_IOCTL, &info);
+
+	sigaddset(&mask, SIGUSR1);
+	sigprocmask(SIG_BLOCK, &mask, NULL);
+	ioctl(f->_fileno, PERFUSER_IOCTL, &info);
+	sigprocmask(SIG_UNBLOCK, &mask, NULL);
 	printf("done\n");
 	return 0;
 }
