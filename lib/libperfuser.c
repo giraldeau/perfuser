@@ -98,7 +98,6 @@ error_fd:
 int perfuser_unregister()
 {
 	int ret = 0;
-	ret = perfuser_ioctl(state, PERFUSER_DEBUG);
 	if (perfuser_registered()) {
 		ret = perfuser_ioctl(state, PERFUSER_UNREGISTER);
 		sigaction(state->pu.signum, &state->sigact_old, NULL);
@@ -111,4 +110,14 @@ int perfuser_unregister()
 int perfuser_get_fd()
 {
 	return perfuser_registered() ? state->fd->_fileno : -1;
+}
+
+int perfuser_suspend()
+{
+	return perfuser_ioctl(state, PERFUSER_SUSPEND);
+}
+
+int perfuser_resume()
+{
+	return perfuser_ioctl(state, PERFUSER_RESUME);
 }

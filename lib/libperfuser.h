@@ -59,4 +59,7 @@ int perfuser_unregister();
  */
 int perfuser_get_fd();
 
+int perfuser_susped();
+int perfuser_resume();
+
 #endif /* LIBPERFUSER_H_ */
